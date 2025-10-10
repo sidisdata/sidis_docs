@@ -13,6 +13,9 @@ const config = {
   title: 'Sidis Data Platform',
   tagline: 'Awesome API',
   favicon: 'img/favicon.ico',
+  projectName: 'sidisdocs.github.io',
+  organizationName: 'sidis',
+  trailingSlash: false,
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
