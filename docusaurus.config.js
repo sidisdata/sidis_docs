@@ -12,7 +12,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Sidis Data Platform',
   tagline: 'Awesome API',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/sidislogo.png',
   projectName: 'sidisdocs.github.io',
   organizationName: 'sidis',
   trailingSlash: false,
