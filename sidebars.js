@@ -26,6 +26,11 @@ const sidebars = {
       label: 'Notifications',
       items: ['notifications/action', 'notifications/action_examples', 'notifications/sidis_change'],
     },
+        {
+      type: 'category',
+      label: 'MCP Server',
+      items: [ 'mcp-server/technicaldoc', 'mcp-server/implementation'],
+    },
   ],
    
 };
