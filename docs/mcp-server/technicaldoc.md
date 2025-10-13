@@ -4,7 +4,7 @@
 **Fecha:** Octubre 2025  
 **Autor:** Tyson Cardelli
 
-## 📖 Índice
+## Índice
 
 1. [Resumen Ejecutivo](#resumen-ejecutivo)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
@@ -17,7 +17,7 @@
 
 ---
 
-## 🎯 Resumen Ejecutivo
+##  Resumen Ejecutivo
 
 ### ¿Qué es SIDIS API Gateway?
 
@@ -44,7 +44,7 @@ graph LR
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+##  Arquitectura del Sistema
 
 ### Flujo de Datos
 
@@ -75,7 +75,7 @@ graph LR
 
 ---
 
-## 🔧 Componentes Implementados
+##  Componentes Implementados
 
 ### 1. Servicios Core
 
@@ -92,10 +92,10 @@ class McpService {
 ```
 
 **Funciones:**
-- ✅ Spawn del proceso MCP server
-- ✅ Comunicación JSON-RPC 2.0
-- ✅ Manejo de timeouts y errores
-- ✅ Lista dinámica de herramientas
+-  Spawn del proceso MCP server
+-  Comunicación JSON-RPC 2.0
+-  Manejo de timeouts y errores
+-  Lista dinámica de herramientas
 
 #### **LLMService** (`src/services/llm.service.ts`)
 ```typescript
@@ -107,10 +107,10 @@ class LLMService {
 ```
 
 **Funciones:**
-- ✅ Integración OpenAI GPT-4
-- ✅ Function calling automático
-- ✅ Formateo de herramientas MCP para LLM
-- 🔄 Preparado para Anthropic, Gemini
+-  Integración OpenAI GPT-4
+-  Function calling automático
+-  Formateo de herramientas MCP para LLM
+-  Preparado para Anthropic, Gemini
 
 ### 2. Controladores
 
@@ -124,10 +124,10 @@ class ChatController {
 ```
 
 **Funciones:**
-- ✅ Manejo de conversaciones multi-turn
-- ✅ Ejecución automática de herramientas
-- ✅ Historial de conversación
-- ✅ System prompts especializados para SIDIS
+-  Manejo de conversaciones multi-turn
+-  Ejecución automática de herramientas
+-  Historial de conversación
+-  System prompts especializados para SIDIS
 
 ### 3. Sistema de Tipos
 
@@ -186,7 +186,7 @@ class Logger {
 
 ---
 
-## 🔌 API Reference
+##  API Reference
 
 ### Base URL
 ```
@@ -285,7 +285,7 @@ Métricas detalladas
 
 ---
 
-## ⚙️ Configuración
+##  Configuración
 
 ### Variables de Entorno (`.env`)
 
@@ -323,7 +323,7 @@ El sistema espera que tu servidor MCP esté en la ruta especificada por `MCP_SER
 
 ---
 
-## 🚀 Despliegue
+##  Despliegue
 
 ### Desarrollo Local
 
@@ -389,7 +389,7 @@ JWT_SECRET=${JWT_SECRET}
 
 ---
 
-## 🔍 Resolución de Problemas
+##  Resolución de Problemas
 
 ### Problemas Comunes
 
@@ -447,15 +447,15 @@ DEBUG=true npm run dev
 
 #### Estructura de Logs
 ```
-ℹ️ [INFO] 2025-10-13T10:00:00.000Z - 🚀 Inicializando SIDIS API Gateway...
-🔌 [INFO] 2025-10-13T10:00:01.000Z - 📡 Conectando con MCP Server...
-✅ [INFO] 2025-10-13T10:00:02.000Z - MCP Server conectado
-🤖 [INFO] 2025-10-13T10:00:03.000Z - Configurando LLM (openai)...
-💬 [INFO] 2025-10-13T10:00:04.000Z - Nueva consulta: Lista los últimos 5 leads
-🛠️ [INFO] 2025-10-13T10:00:05.000Z - Herramientas disponibles: 15
-🔧 [INFO] 2025-10-13T10:00:06.000Z - Ejecutando 2 herramientas...
-📞 [INFO] 2025-10-13T10:00:07.000Z - Llamando: leads_list
-✅ [INFO] 2025-10-13T10:00:08.000Z - Respuesta generada (2 herramientas usadas)
+ [INFO] 2025-10-13T10:00:00.000Z - 🚀 Inicializando SIDIS API Gateway...
+ [INFO] 2025-10-13T10:00:01.000Z - 📡 Conectando con MCP Server...
+ [INFO] 2025-10-13T10:00:02.000Z - MCP Server conectado
+ [INFO] 2025-10-13T10:00:03.000Z - Configurando LLM (openai)...
+ [INFO] 2025-10-13T10:00:04.000Z - Nueva consulta: Lista los últimos 5 leads
+ [INFO] 2025-10-13T10:00:05.000Z - Herramientas disponibles: 15
+ [INFO] 2025-10-13T10:00:06.000Z - Ejecutando 2 herramientas...
+ [INFO] 2025-10-13T10:00:07.000Z - Llamando: leads_list
+ [INFO] 2025-10-13T10:00:08.000Z - Respuesta generada (2 herramientas usadas)
 ```
 
 ### Monitoreo
@@ -476,45 +476,45 @@ curl http://localhost:3000/api/status
 
 ---
 
-## 🛣️ Roadmap
+##  Roadmap
 
 ### Versión Actual (1.0.0)
-- ✅ Integración OpenAI
-- ✅ Conexión MCP
-- ✅ Chat conversacional
-- ✅ API REST completa
+-  Integración OpenAI
+-  Conexión MCP
+-  Chat conversacional
+-  API REST completa
 
 ### Próximas Versiones
 
 #### v1.1.0 - Más LLMs
-- 🔄 Integración Anthropic Claude
-- 🔄 Soporte Gemini
-- 🔄 LLMs locales (Ollama)
+-  Integración Anthropic Claude
+-  Soporte Gemini
+-  LLMs locales (Ollama)
 
 #### v1.2.0 - Autenticación
-- 🔄 JWT tokens
-- 🔄 Rate limiting por usuario
-- 🔄 Roles y permisos
+-  JWT tokens
+-  Rate limiting por usuario
+-  Roles y permisos
 
 #### v1.3.0 - Analytics
-- 🔄 Métricas de uso
-- 🔄 Dashboard admin
-- 🔄 Logs estructurados
+-  Métricas de uso
+-  Dashboard admin
+-  Logs estructurados
 
 #### v2.0.0 - Multi-tenant
-- 🔄 Múltiples clientes SIDIS
-- 🔄 Configuración por tenant
-- 🔄 Billing integrado
+-  Múltiples clientes SIDIS
+-  Configuración por tenant
+-  Billing integrado
 
 ### Integraciones Futuras
-- 🔄 Slack/Teams bots
-- 🔄 WhatsApp Business
-- 🔄 Webhooks
-- 🔄 GraphQL API
+-  Slack/Teams bots
+-  WhatsApp Business
+-  Webhooks
+-  GraphQL API
 
 ---
 
-## 📚 Recursos Adicionales
+##  Recursos Adicionales
 
 ### Documentación Relacionada
 - [SIDIS API Docs](https://docs.sidis.ai)

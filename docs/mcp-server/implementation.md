@@ -2,50 +2,50 @@
 
 **Target:** Desarrolladores que van a integrar o extender el sistema
 
-## 🚀 Quick Start para Desarrolladores
+##  Quick Start para Desarrolladores
 
 ### Estructura del Proyecto
 
 ```
 sidis-api-gateway/
 ├── src/
-│   ├── app.ts                    # 🎯 Entry point principal
-│   ├── app-simple.ts             # 🧪 Versión simplificada para pruebas
+│   ├── app.ts                    #  Entry point principal
+│   ├── app-simple.ts             #  Versión simplificada para pruebas
 │   │
-│   ├── controllers/              # 🎮 Lógica de endpoints
-│   │   ├── chat.controller.ts    # 💬 Manejo de conversaciones
-│   │   ├── auth.controller.ts    # 🔐 Autenticación (futuro)
-│   │   └── models.controller.ts  # 📊 Gestión de modelos SIDIS
+│   ├── controllers/              #  Lógica de endpoints
+│   │   ├── chat.controller.ts    #  Manejo de conversaciones
+│   │   ├── auth.controller.ts    #  Autenticación (futuro)
+│   │   └── models.controller.ts  #  Gestión de modelos SIDIS
 │   │
-│   ├── services/                 # 🔧 Servicios de negocio
-│   │   ├── mcp.service.ts        # 🔌 Conexión con MCP Server
-│   │   ├── llm.service.ts        # 🤖 Integración LLMs
-│   │   └── sidis.service.ts      # 📡 Cliente SIDIS directo
+│   ├── services/                 #  Servicios de negocio
+│   │   ├── mcp.service.ts        #  Conexión con MCP Server
+│   │   ├── llm.service.ts        #  Integración LLMs
+│   │   └── sidis.service.ts      #  Cliente SIDIS directo
 │   │
-│   ├── routes/                   # 🛤️ Definición de rutas
-│   │   ├── api.routes.ts         # 🌐 Rutas principales
-│   │   └── auth.routes.ts        # 🔑 Rutas de auth (futuro)
+│   ├── routes/                   #  Definición de rutas
+│   │   ├── api.routes.ts         #  Rutas principales
+│   │   └── auth.routes.ts        #  Rutas de auth (futuro)
 │   │
-│   ├── middleware/               # 🛡️ Middlewares
-│   │   ├── auth.middleware.ts    # 👮 Autenticación
-│   │   ├── rate-limit.middleware.ts # 🚦 Rate limiting
-│   │   └── validation.middleware.ts # ✅ Validación
+│   ├── middleware/               #  Middlewares
+│   │   ├── auth.middleware.ts    #  Autenticación
+│   │   ├── rate-limit.middleware.ts #  Rate limiting
+│   │   └── validation.middleware.ts #  Validación
 │   │
-│   ├── types/                    # 📝 Tipos TypeScript
-│   │   ├── api.types.ts          # 🔗 Tipos de API
-│   │   ├── mcp.types.ts          # 🔧 Tipos MCP
-│   │   └── billing.types.ts      # 💰 Tipos de billing
+│   ├── types/                    #  Tipos TypeScript
+│   │   ├── api.types.ts          #  Tipos de API
+│   │   ├── mcp.types.ts          #  Tipos MCP
+│   │   └── billing.types.ts      #  Tipos de billing
 │   │
-│   └── utils/                    # 🛠️ Utilidades
-│       ├── config.ts             # ⚙️ Configuración
-│       ├── logger.ts             # 📋 Sistema de logs
-│       └── validators.ts         # ✔️ Validadores
+│   └── utils/                    #  Utilidades
+│       ├── config.ts             #  Configuración
+│       ├── logger.ts             #  Sistema de logs
+│       └── validators.ts         #  Validadores
 │
-├── docs/                         # 📚 Documentación
-├── dist/                         # 📦 Código compilado
-├── start.js                      # 🚀 Script de inicio con validaciones
-├── test-start.js                 # 🧪 Script de prueba
-└── package.json                  # 📋 Configuración NPM
+├── docs/                         #  Documentación
+├── dist/                         #  Código compilado
+├── start.js                      #  Script de inicio con validaciones
+├── test-start.js                 #  Script de prueba
+└── package.json                  #  Configuración NPM
 ```
 
 ---
@@ -232,7 +232,7 @@ const response = {
 
 ---
 
-## 🔌 Extensiones y Customizaciones
+##  Extensiones y Customizaciones
 
 ### 1. Agregar Nuevo Proveedor LLM
 
@@ -326,7 +326,7 @@ if (!await this.billingService.checkQuota(req.user.id)) {
 
 ---
 
-## 🧪 Testing y Desarrollo
+##  Testing y Desarrollo
 
 ### Tests Unitarios
 
@@ -404,7 +404,7 @@ const mcpService = process.env.NODE_ENV === 'test'
 
 ---
 
-## 🔄 Patrones de Diseño Implementados
+##  Patrones de Diseño Implementados
 
 ### 1. **Dependency Injection**
 ```typescript
@@ -449,7 +449,7 @@ class Logger {
 
 ---
 
-## 📊 Métricas y Monitoring
+##  Métricas y Monitoring
 
 ### Health Checks Customizados
 
@@ -503,7 +503,7 @@ Metrics.increment('llm.tokens', response.usage.total_tokens);
 
 ---
 
-## 🚀 Deployment Avanzado
+##  Deployment Avanzado
 
 ### Docker Multi-stage
 
@@ -613,7 +613,7 @@ jobs:
 
 ---
 
-## 📝 Checklist para Desarrolladores
+##  Checklist para Desarrolladores
 
 ### Antes de Commit
 - [ ] Tests unitarios pasan
