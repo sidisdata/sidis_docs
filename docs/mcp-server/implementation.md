@@ -637,4 +637,3 @@ jobs:
 
 ---
 
-**¿Necesitas ayuda implementando alguna de estas funcionalidades o tienes preguntas específicas sobre el código?**
