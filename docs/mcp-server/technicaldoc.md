@@ -1,33 +1,47 @@
-# SIDIS API Gateway - Documentación Técnica
+# SIDIS MCP API Gateway - Documentación Técnica
 
-**Versión:** 1.0.0  
+**Versión:** 2.0.0  
 **Fecha:** Octubre 2025  
 **Autor:** Tyson Cardelli
 
-## Índice
+## 📖 Índice
 
 1. [Resumen Ejecutivo](#resumen-ejecutivo)
 2. [Arquitectura del Sistema](#arquitectura-del-sistema)
-3. [Componentes Implementados](#componentes-implementados)
-4. [API Reference](#api-reference)
-5. [Configuración](#configuración)
-6. [Despliegue](#despliegue)
-7. [Resolución de Problemas](#resolución-de-problemas)
-8. [Roadmap](#roadmap)
+3. [MCP Server Avanzado](#mcp-server-avanzado)
+4. [Sistema de Segmentos Automáticos](#sistema-de-segmentos-automáticos)
+5. [Herramientas MCP Disponibles](#herramientas-mcp-disponibles)
+6. [API Reference](#api-reference)
+7. [Configuración](#configuración)
+8. [Despliegue](#despliegue)
+9. [Ejemplos Prácticos](#ejemplos-prácticos)
+10. [Resolución de Problemas](#resolución-de-problemas)
+11. [Roadmap](#roadmap)
 
 ---
 
-##  Resumen Ejecutivo
+## 🎯 Resumen Ejecutivo
 
-### ¿Qué es SIDIS API Gateway?
+### ¿Qué es SIDIS MCP API Gateway?
 
-SIDIS API Gateway es una **capa de abstracción inteligente** que permite a aplicaciones frontend interactuar con el CRM SIDIS usando **lenguaje natural**. 
+SIDIS MCP API Gateway es una **solución comercial completa** que transforma cualquier servidor MCP de SIDIS en un API Gateway inteligente con **descubrimiento dinámico de modelos**, **IA conversacional avanzada** y **sistema de segmentos automáticos**.
+
+### 🚀 Logros Implementados (v2.0)
+
+- ✅ **Sistema Dinámico Universal:** Se adapta automáticamente a cualquier esquema SIDIS
+- ✅ **IA Multi-Iteración:** OpenAI GPT-4o con function calling y hasta 3 iteraciones
+- ✅ **Segmentos Automáticos:** Guarda automáticamente consultas como segmentos reutilizables
+- ✅ **Agregaciones MongoDB:** Soporte completo para pipelines de agregación avanzados
+- ✅ **Arquitectura Comercial:** Lista para producción con logging, rate limiting y JWT
+- ✅ **Zero Configuration:** Descubre modelos automáticamente vía `/models` endpoint
 
 ### Valor de Negocio
 
-- **Para Desarrolladores:** API REST simple para integrar IA conversacional
-- **Para Clientes:** Consultas en lenguaje natural sobre sus datos CRM
-- **Para el Negocio:** Producto comercializable como "CRM + IA"
+- **Para Desarrolladores:** Una sola API para todos los modelos SIDIS + IA conversacional + segmentos automáticos
+- **Para Clientes:** "Dime qué necesitas" → respuesta automática con datos reales + guardado automático para reutilización
+- **Para el Negocio:** Producto escalable que funciona con cualquier configuración SIDIS + analytics automático
+- **Para DevOps:** Cero mantenimiento - se adapta automáticamente a cambios de schema
+- **Para Data Analysis:** Segmentos automáticos con pipelines MongoDB reutilizables
 
 ### Tecnologías Clave
 
@@ -44,9 +58,36 @@ graph LR
 
 ---
 
-##  Arquitectura del Sistema
+## 🔄 Sistema Dinámico de Descubrimiento (v2.0)
 
-### Flujo de Datos
+### Innovación Clave: Zero-Configuration Architecture
+
+El sistema ya no requiere configuración manual de modelos. **Se autodescubre automáticamente.**
+
+#### Workflow Dinámico:
+```bash
+1. LLM recibe consulta: "Lista los últimos 5 people creados"
+2. Sistema llama: models_discover() → GET /models 
+3. SIDIS responde: [{"name":"People","path":"/people"}, ...]
+4. Sistema usa: sidis_query("/people", "list", limit=5)
+5. Resultado: Datos reales de SIDIS
+```
+
+#### Herramientas MCP Dinámicas:
+- **`models_discover`**: Descubre modelos disponibles con agregación optimizada
+- **`sidis_query`**: Consulta genérica para cualquier modelo (list/get/create/count)
+
+#### Ventajas vs Sistema Estático:
+- ✅ **Escalable**: Funciona con nuevos modelos sin código
+- ✅ **Mantenible**: Un solo endpoint genérico vs N endpoints específicos  
+- ✅ **Robusto**: Se adapta a cambios de schema automáticamente
+- ✅ **Performance**: Agregación optimizada para respuestas compactas
+
+---
+
+## 🏗️ Arquitectura del Sistema
+
+### Flujo de Datos Completo
 
 1. **Cliente** envía consulta en lenguaje natural
 2. **API Gateway** recibe y valida la petición
@@ -75,14 +116,241 @@ graph LR
 
 ---
 
-##  Componentes Implementados
+## 🤖 MCP Server Avanzado
+
+### Servidor MCP SIDIS v2.0
+
+El MCP Server (`src/mcp/sidis-mcp.ts`) es el corazón inteligente del sistema, que actúa como bridge entre la IA y la API de SIDIS.
+
+#### Características Principales:
+
+- **🔍 Descubrimiento Dinámico**: Auto-detecta modelos disponibles
+- **📊 Agregaciones MongoDB**: Soporte completo para pipelines complejos
+- **💾 Segmentos Automáticos**: Guarda consultas para reutilización
+- **⚡ Optimización**: Respuestas compactas con agregación inteligente
+
+#### Arquitectura MCP:
+
+```mermaid
+graph TD
+    A[LLM Service] -->|JSON-RPC| B[MCP Server]
+    B --> C[models_discover]
+    B --> D[sidis_query]
+    B --> E[sidis_aggregate]
+    B --> F[sidis_aggregate_and_save]
+    
+    C -->|GET /models| G[SIDIS API]
+    D -->|GET/POST /model| G
+    E -->|GET /model?aggregate=| G
+    F -->|GET + POST /segments| G
+```
+
+---
+
+## 🎯 Sistema de Segmentos Automáticos
+
+### ¿Qué son los Segmentos Automáticos?
+
+Cada consulta que realices se guarda automáticamente como un **segmento reutilizable** que contiene:
+
+- **Pipeline de Agregación**: La consulta MongoDB exacta que se ejecutó
+- **Metadatos**: Modelo, descripción, fechas de creación/expiración
+- **Configuración**: Filtros, límites, ordenamientos aplicados
+
+### Flujo de Segmentos Automáticos:
+
+```bash
+1. Usuario: "Dame las últimas 5 oficinas"
+2. MCP ejecuta: sidis_query("/offices", "list", limit=5)
+3. Pipeline generado: [{"$sort":{"createdAt":-1}}, {"$limit":5}]
+4. Automáticamente: POST /segments con el pipeline
+5. Segmento creado: "Consulta Office - 2025-10-24" (expira en 72h)
+```
+
+### Estructura del Segmento:
+
+```json
+{
+  "_id": "68fbc45f09e6ce7a4d4c16a7",
+  "name": "Consulta Office - 2025-10-24",
+  "description": "Consulta automática: 3 registros del modelo Office (límite: 5, saltar: 0)",
+  "model": "Office",
+  "type": "aggregate",
+  "status": "active",
+  "expireIn": "2025-10-27T18:24:31.149Z",
+  "aggregate": [
+    {"$sort": {"createdAt": -1, "_id": -1}},
+    {"$limit": 5}
+  ]
+}
+```
+
+### Ventajas del Sistema:
+
+- ✅ **Reutilización**: Los pipelines se pueden ejecutar nuevamente
+- ✅ **Auditoría**: Historial completo de consultas realizadas
+- ✅ **Performance**: Pipelines optimizados MongoDB
+- ✅ **Expiración**: Limpieza automática después de 72 horas
+- ✅ **Analytics**: Base de datos de patrones de consulta
+
+---
+
+## 🛠️ Herramientas MCP Disponibles
+
+### 1. **models_discover**
+Descubre todos los modelos disponibles en SIDIS.
+
+```typescript
+{
+  title: "Models: discover",
+  description: "Discover available models from SIDIS API with their paths and schemas. ALWAYS call this first before any other operation.",
+  inputSchema: {}
+}
+```
+
+**Uso típico:**
+```bash
+LLM → models_discover() → Lista de modelos con paths
+```
+
+**Respuesta:**
+```json
+[
+  {"_id": "...", "name": "People", "path": "/people"},
+  {"_id": "...", "name": "Office", "path": "/offices"},
+  {"_id": "...", "name": "Company", "path": "/companies"}
+]
+```
+
+### 2. **sidis_query** (⭐ Principal)
+Herramienta universal para consultar cualquier modelo con **segmento automático**.
+
+```typescript
+{
+  title: "SIDIS: dynamic query",
+  description: "Query any SIDIS model dynamically and automatically save results as segments when applicable.",
+  inputSchema: {
+    modelPath: string,        // "/people", "/offices", etc.
+    operation: "list|get|create|count",
+    limit?: number,           // Máximo 100
+    skip?: number,           // Para paginación
+    match?: object,          // Filtros MongoDB
+    id?: string,             // Para operación "get"
+    data?: object,           // Para operación "create"
+    saveAsSegment?: boolean  // default: true
+  }
+}
+```
+
+**Ejemplos de uso:**
+
+```javascript
+// Consulta simple
+sidis_query({
+  modelPath: "/people",
+  operation: "list",
+  limit: 5
+})
+
+// Con filtros
+sidis_query({
+  modelPath: "/companies", 
+  operation: "list",
+  match: {"industry": "technology"},
+  limit: 10
+})
+
+// Crear registro
+sidis_query({
+  modelPath: "/people",
+  operation: "create", 
+  data: {"name": "Juan Pérez", "email": "juan@example.com"}
+})
+```
+
+### 3. **sidis_aggregate**
+Ejecuta agregaciones MongoDB avanzadas **sin guardar** como segmento.
+
+```typescript
+{
+  title: "SIDIS: aggregate data",
+  description: "Perform MongoDB aggregation on a SIDIS model. Use this for complex queries, grouping, calculations, etc.",
+  inputSchema: {
+    modelPath: string,
+    pipeline: Array<object>,  // Pipeline MongoDB
+    match?: object           // Filtro inicial opcional
+  }
+}
+```
+
+**Ejemplo:**
+```javascript
+sidis_aggregate({
+  modelPath: "/people",
+  pipeline: [
+    {"$group": {"_id": "$city", "count": {"$sum": 1}}},
+    {"$sort": {"count": -1}},
+    {"$limit": 10}
+  ]
+})
+```
+
+### 4. **sidis_aggregate_and_save** (🎯 Avanzada)
+Ejecuta agregación Y guarda automáticamente como segmento personalizado.
+
+```typescript
+{
+  title: "SIDIS: create aggregate and save as segment", 
+  description: "Perform aggregation on a SIDIS model and save the result as a segment. This combines querying with automatic segment creation.",
+  inputSchema: {
+    modelPath: string,
+    modelName: string,        // "People", "Companies"
+    segmentName?: string,     // Nombre personalizado
+    segmentDescription?: string,
+    pipeline: Array<object>,
+    match?: object
+  }
+}
+```
+
+**Ejemplo:**
+```javascript
+sidis_aggregate_and_save({
+  modelPath: "/people",
+  modelName: "People",
+  segmentName: "Personas de Tecnología",
+  segmentDescription: "Personas que trabajan en empresas de tecnología",
+  pipeline: [
+    {"$lookup": {"from": "companies", "localField": "companyId", "foreignField": "_id", "as": "company"}},
+    {"$match": {"company.industry": "technology"}},
+    {"$project": {"name": 1, "email": 1, "company.name": 1}}
+  ]
+})
+```
+
+### 5. **sidis_get_model_schema**
+Obtiene el esquema completo de un modelo específico.
+
+```typescript
+{
+  title: "SIDIS: get model schema",
+  description: "Fetch the full model definition/schema from SIDIS API for a given model path",
+  inputSchema: {
+    modelPath: string  // "/people", "/companies", etc.
+  }
+}
+```
+
+---
+
+## 🔧 Componentes Implementados
 
 ### 1. Servicios Core
 
 #### **McpService** (`src/services/mcp.service.ts`)
 ```typescript
 class McpService {
-    // Conexión con el servidor MCP original de SIDIS
+    // Conexión con el servidor MCP avanzado de SIDIS
     async initialize(): Promise<void>
     async callTool(toolName: string, args: any): Promise<any>
     async getAvailableTools(): Promise<McpTool[]>
@@ -92,10 +360,12 @@ class McpService {
 ```
 
 **Funciones:**
--  Spawn del proceso MCP server
--  Comunicación JSON-RPC 2.0
--  Manejo de timeouts y errores
--  Lista dinámica de herramientas
+- ✅ Spawn del proceso MCP server avanzado
+- ✅ Comunicación JSON-RPC 2.0 con 5 herramientas
+- ✅ Manejo de timeouts y errores
+- ✅ Lista dinámica de herramientas con schemas
+- ✅ Integración con sistema de segmentos automáticos
+- ✅ Soporte para agregaciones MongoDB complejas
 
 #### **LLMService** (`src/services/llm.service.ts`)
 ```typescript
@@ -107,10 +377,10 @@ class LLMService {
 ```
 
 **Funciones:**
--  Integración OpenAI GPT-4
--  Function calling automático
--  Formateo de herramientas MCP para LLM
--  Preparado para Anthropic, Gemini
+- ✅ Integración OpenAI GPT-4
+- ✅ Function calling automático
+- ✅ Formateo de herramientas MCP para LLM
+- 🔄 Preparado para Anthropic, Gemini
 
 ### 2. Controladores
 
@@ -124,10 +394,10 @@ class ChatController {
 ```
 
 **Funciones:**
--  Manejo de conversaciones multi-turn
--  Ejecución automática de herramientas
--  Historial de conversación
--  System prompts especializados para SIDIS
+- ✅ Manejo de conversaciones multi-turn
+- ✅ Ejecución automática de herramientas
+- ✅ Historial de conversación
+- ✅ System prompts especializados para SIDIS
 
 ### 3. Sistema de Tipos
 
@@ -186,7 +456,64 @@ class Logger {
 
 ---
 
-##  API Reference
+## � Ejemplos Prácticos del Sistema Dinámico
+
+### Caso 1: Descubrir Modelos Disponibles
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "¿Qué modelos están disponibles?", "conversationId": "demo-1"}'
+```
+
+**Respuesta:**
+```json
+{
+  "success": true, 
+  "data": {
+    "message": "Encontré 65 modelos disponibles: People, Companies, Leads, Activities, Tasks, etc. ¿Con cuál te gustaría trabajar?",
+    "toolsUsed": 1
+  }
+}
+```
+
+### Caso 2: Consulta Compleja Multi-Iteración
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Muéstrame los últimos 3 people creados con sus emails", "conversationId": "demo-2"}'
+```
+
+**Flujo Interno:**
+1. **Iteración 1**: `models_discover()` → Encuentra modelo "People" con path "/people"
+2. **Iteración 2**: `sidis_query("/people", "list", limit=3)` → Obtiene datos reales
+3. **Resultado**: Datos formateados con nombres y emails
+
+### Caso 3: Operación Create Dinámica  
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Crea una nueva persona llamada Juan Pérez con email juan@example.com", "conversationId": "demo-3"}'
+```
+
+**El sistema:**
+1. Descubre que "People" existe
+2. Ejecuta `sidis_query("/people", "create", data={"name": "Juan Pérez", "email": "juan@example.com"})`
+3. Confirma la creación exitosa
+
+### Caso 4: Filtros y Búsquedas Avanzadas
+```bash
+# "Busca todas las companies que contengan 'Tech' en el nombre"
+# El sistema automáticamente usa agregación MongoDB:
+{
+  "modelPath": "/companies",
+  "operation": "list", 
+  "match": {"name": {"$regex": "Tech", "$options": "i"}}
+}
+```
+
+---
+
+## �🔌 API Reference
 
 ### Base URL
 ```
@@ -285,7 +612,7 @@ Métricas detalladas
 
 ---
 
-##  Configuración
+## ⚙️ Configuración
 
 ### Variables de Entorno (`.env`)
 
@@ -323,7 +650,7 @@ El sistema espera que tu servidor MCP esté en la ruta especificada por `MCP_SER
 
 ---
 
-##  Despliegue
+## 🚀 Despliegue
 
 ### Desarrollo Local
 
@@ -389,7 +716,182 @@ JWT_SECRET=${JWT_SECRET}
 
 ---
 
-##  Resolución de Problemas
+## � Ejemplos Prácticos
+
+### Caso 1: Consulta Básica con Segmento Automático
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Dame las últimas 5 oficinas", "conversationId": "demo-1"}'
+```
+
+**Flujo interno:**
+1. **models_discover()** → Encuentra modelo "Office" en `/offices`
+2. **sidis_query("/offices", "list", limit=5)** → Obtiene datos
+3. **Auto-segmento creado:** "Consulta Office - 2025-10-24"
+4. **Pipeline guardado:** `[{"$sort":{"createdAt":-1}}, {"$limit":5}]`
+
+**Respuesta:**
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Aquí tienes las últimas 3 oficinas:\n1. Nemobile Applications Worldwide - Venezuela\n...",
+    "toolsUsed": 2,
+    "conversationId": "demo-1"
+  }
+}
+```
+
+### Caso 2: Consulta con Filtros Avanzados
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Muéstrame todas las empresas de tecnología creadas este año", "conversationId": "demo-2"}'
+```
+
+**Pipeline generado automáticamente:**
+```json
+[
+  {
+    "$match": {
+      "industry": "technology",
+      "createdAt": {"$gte": "2025-01-01T00:00:00.000Z"}
+    }
+  },
+  {"$sort": {"createdAt": -1, "_id": -1}},
+  {"$limit": 10}
+]
+```
+
+### Caso 3: Agregación Personalizada
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Agrupa las personas por ciudad y cuenta cuántas hay en cada una", "conversationId": "demo-3"}'
+```
+
+**El sistema usará:**
+```javascript
+sidis_aggregate({
+  modelPath: "/people",
+  pipeline: [
+    {"$group": {"_id": "$city", "count": {"$sum": 1}}},
+    {"$sort": {"count": -1}}
+  ]
+})
+```
+
+### Caso 4: Crear Segmento Personalizado
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Crea un segmento llamado \'Clientes VIP\' con todas las personas que tienen más de 5 oportunidades", "conversationId": "demo-4"}'
+```
+
+**El sistema usará:**
+```javascript
+sidis_aggregate_and_save({
+  modelPath: "/people",
+  modelName: "People", 
+  segmentName: "Clientes VIP",
+  segmentDescription: "Personas con más de 5 oportunidades de negocio",
+  pipeline: [
+    {
+      "$lookup": {
+        "from": "opportunities",
+        "localField": "_id", 
+        "foreignField": "personId",
+        "as": "opportunities"
+      }
+    },
+    {
+      "$match": {
+        "$expr": {"$gt": [{"$size": "$opportunities"}, 5]}
+      }
+    },
+    {
+      "$project": {
+        "name": 1,
+        "email": 1, 
+        "opportunityCount": {"$size": "$opportunities"}
+      }
+    }
+  ]
+})
+```
+
+### Caso 5: Consulta Multi-Modelo
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Dame las últimas 3 personas y las últimas 3 empresas", "conversationId": "demo-5"}'
+```
+
+**El sistema ejecutará:**
+1. **sidis_query("/people", "list", limit=3)** → Segmento: "Consulta People - 2025-10-24"
+2. **sidis_query("/companies", "list", limit=3)** → Segmento: "Consulta Company - 2025-10-24"
+3. **Combina resultados** en una respuesta unificada
+
+### Caso 6: Consulta de Análisis
+
+**Consulta:**
+```bash
+curl -X POST http://localhost:3000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "¿Cuántas oportunidades se crearon este mes por estado?", "conversationId": "demo-6"}'
+```
+
+**Pipeline generado:**
+```json
+[
+  {
+    "$match": {
+      "createdAt": {
+        "$gte": "2025-10-01T00:00:00.000Z",
+        "$lt": "2025-11-01T00:00:00.000Z"
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": "$status",
+      "count": {"$sum": 1},
+      "totalValue": {"$sum": "$value"}
+    }
+  },
+  {"$sort": {"count": -1}}
+]
+```
+
+### Verificación de Segmentos Creados
+
+Puedes verificar los segmentos creados automáticamente consultando:
+
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+     https://app4.sidis.ai/sidis/api/segments
+```
+
+Cada consulta habrá creado un segmento con:
+- **Nombre descriptivo** basado en la consulta
+- **Pipeline reutilizable** para ejecutar la misma consulta
+- **Expiración automática** en 72 horas
+- **Metadatos completos** del modelo y operación
+
+---
+
+## �🔍 Resolución de Problemas
 
 ### Problemas Comunes
 
@@ -447,15 +949,15 @@ DEBUG=true npm run dev
 
 #### Estructura de Logs
 ```
- [INFO] 2025-10-13T10:00:00.000Z - 🚀 Inicializando SIDIS API Gateway...
- [INFO] 2025-10-13T10:00:01.000Z - 📡 Conectando con MCP Server...
- [INFO] 2025-10-13T10:00:02.000Z - MCP Server conectado
- [INFO] 2025-10-13T10:00:03.000Z - Configurando LLM (openai)...
- [INFO] 2025-10-13T10:00:04.000Z - Nueva consulta: Lista los últimos 5 leads
- [INFO] 2025-10-13T10:00:05.000Z - Herramientas disponibles: 15
- [INFO] 2025-10-13T10:00:06.000Z - Ejecutando 2 herramientas...
- [INFO] 2025-10-13T10:00:07.000Z - Llamando: leads_list
- [INFO] 2025-10-13T10:00:08.000Z - Respuesta generada (2 herramientas usadas)
+ℹ️ [INFO] 2025-10-13T10:00:00.000Z - 🚀 Inicializando SIDIS API Gateway...
+🔌 [INFO] 2025-10-13T10:00:01.000Z - 📡 Conectando con MCP Server...
+✅ [INFO] 2025-10-13T10:00:02.000Z - MCP Server conectado
+🤖 [INFO] 2025-10-13T10:00:03.000Z - Configurando LLM (openai)...
+💬 [INFO] 2025-10-13T10:00:04.000Z - Nueva consulta: Lista los últimos 5 leads
+🛠️ [INFO] 2025-10-13T10:00:05.000Z - Herramientas disponibles: 15
+🔧 [INFO] 2025-10-13T10:00:06.000Z - Ejecutando 2 herramientas...
+📞 [INFO] 2025-10-13T10:00:07.000Z - Llamando: leads_list
+✅ [INFO] 2025-10-13T10:00:08.000Z - Respuesta generada (2 herramientas usadas)
 ```
 
 ### Monitoreo
@@ -476,45 +978,73 @@ curl http://localhost:3000/api/status
 
 ---
 
-##  Roadmap
+## 🛣️ Roadmap
 
-### Versión Actual (1.0.0)
--  Integración OpenAI
--  Conexión MCP
--  Chat conversacional
--  API REST completa
+### Versión Actual (2.0.0) ✅
+- ✅ Integración OpenAI con function calling
+- ✅ MCP Server avanzado con 5 herramientas
+- ✅ Sistema de segmentos automáticos
+- ✅ Agregaciones MongoDB completas
+- ✅ Descubrimiento dinámico de modelos
+- ✅ Chat conversacional multi-iteración
+- ✅ API REST completa con middleware
+- ✅ Kubernetes deployment ready
 
 ### Próximas Versiones
 
-#### v1.1.0 - Más LLMs
--  Integración Anthropic Claude
--  Soporte Gemini
--  LLMs locales (Ollama)
+#### v2.1.0 - Gestión de Segmentos Avanzada
+- 🔄 Dashboard de segmentos creados
+- 🔄 Reutilización inteligente de segmentos existentes
+- 🔄 Segmentos compartidos entre usuarios
+- 🔄 Exportación de segmentos a diferentes formatos
+- 🔄 Análisis de patrones de consulta
 
-#### v1.2.0 - Autenticación
--  JWT tokens
--  Rate limiting por usuario
--  Roles y permisos
+#### v2.2.0 - Más LLMs y Optimizaciones
+- 🔄 Integración Anthropic Claude
+- 🔄 Soporte Google Gemini
+- 🔄 LLMs locales (Ollama)
+- 🔄 Optimización de costos de tokens
+- 🔄 Cache inteligente de respuestas
 
-#### v1.3.0 - Analytics
--  Métricas de uso
--  Dashboard admin
--  Logs estructurados
+#### v2.3.0 - Autenticación y Seguridad
+- 🔄 JWT tokens con refresh
+- 🔄 Rate limiting por usuario y segmento
+- 🔄 Roles y permisos granulares
+- 🔄 Auditoría completa de acciones
+- 🔄 Encriptación de segmentos sensibles
 
-#### v2.0.0 - Multi-tenant
--  Múltiples clientes SIDIS
--  Configuración por tenant
--  Billing integrado
+#### v2.4.0 - Analytics y Monitoreo
+- 🔄 Métricas de uso por modelo/herramienta
+- 🔄 Dashboard admin con estadísticas
+- 🔄 Alertas de performance y errores
+- 🔄 Logs estructurados con correlación
+- 🔄 Métricas de efectividad de IA
+
+#### v3.0.0 - Multi-tenant y Enterprise
+- 🔄 Múltiples clientes SIDIS
+- 🔄 Configuración por tenant
+- 🔄 Billing integrado por uso
+- 🔄 Isolation de datos por cliente
+- 🔄 APIs dedicadas por tenant
 
 ### Integraciones Futuras
--  Slack/Teams bots
--  WhatsApp Business
--  Webhooks
--  GraphQL API
+- 🔄 Slack/Teams bots con segmentos
+- 🔄 WhatsApp Business API
+- 🔄 Webhooks para notificaciones
+- 🔄 GraphQL API con subscriptions
+- 🔄 Integración con BI tools (Power BI, Tableau)
+- 🔄 APIs de terceros (Salesforce, HubSpot)
+
+### Características Experimentales
+- 🔮 IA predictiva basada en segmentos históricos
+- 🔮 Auto-sugerencias de consultas basadas en patrones
+- 🔮 Segmentos inteligentes con ML
+- 🔮 Optimización automática de pipelines MongoDB
+- 🔮 Generación automática de reportes
 
 ---
 
-##  Recursos Adicionales
+## 📚 Recursos Adicionales
 
 ### Documentación Relacionada
 - [SIDIS API Docs](https://docs.sidis.ai)
@@ -531,4 +1061,31 @@ MIT License - Ver archivo LICENSE para detalles
 
 ---
 
-**Última actualización:** Octubre 13, 2025
+**Última actualización:** Octubre 27, 2025
+
+---
+
+## 🎯 Resumen de Características v2.0
+
+### Sistema MCP Avanzado
+- **5 herramientas MCP:** models_discover, sidis_query, sidis_aggregate, sidis_aggregate_and_save, sidis_get_model_schema
+- **Descubrimiento automático:** Zero-configuration para nuevos modelos
+- **Agregaciones MongoDB:** Pipelines complejos soportados nativamente
+
+### Segmentos Automáticos
+- **Guardado automático:** Toda consulta list/count se guarda como segmento
+- **Expiración inteligente:** 72 horas por defecto
+- **Pipelines reutilizables:** Guarda la lógica de consulta, no solo los datos
+- **Metadatos completos:** Modelo, descripción, fechas, usuario
+
+### Integración IA
+- **Multi-iteración:** Hasta 3 llamadas de herramientas por consulta
+- **Function calling:** Uso inteligente de herramientas según contexto
+- **Respuestas estructuradas:** Formato consistente y legible
+- **Manejo de errores:** Recuperación automática y logs detallados
+
+### Arquitectura Comercial
+- **Kubernetes ready:** Deployment completo incluido
+- **Logging avanzado:** Trazabilidad completa de operaciones
+- **Configuración flexible:** Variables de entorno para todos los aspectos
+- **Health checks:** Monitoreo de todos los componentes
