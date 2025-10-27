@@ -29,7 +29,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'MCP Server',
-      items: [ 'mcp-server/technicaldoc', 'mcp-server/implementation'],
+      items: [ 'mcp-server/technicaldoc', 'mcp-server/implementation','mcp-server/front'],
     },
     {
       type: 'category',
